@@ -16,4 +16,18 @@ it possible to transparently use containers as environment modules.
 ## Prerequisites
 
 - [Lmod](https://lmod.readthedocs.io/en/latest/)
-- [Singularity](https://sylabs.io/guides/latest/user-guide/) 3.4.1 or later
+- [Singularity](https://sylabs.io/guides/latest/user-guide/) 3.6.0 or later
+
+## Management
+
+You can run the command below to pull and update all container images.
+
+```shell
+./manage.py update
+```
+
+Or, you can pull and update selected container images.
+
+```shell
+./manage.py update -n pytorch -t 1.6.0
+```
