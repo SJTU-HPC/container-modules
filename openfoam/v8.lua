@@ -2,21 +2,22 @@ help([==[
 
 Description
 ===========
-RELION (for REgularized LIkelihood OptimizatioN) implements an empirical
-Bayesian approach for analysis of electron cryo-microscopy (Cryo-EM).
-Specifically it provides methods of refinement of singular or multiple 3D
-reconstructions as well as 2D class averages. RELION is an important tool in
-the study of living cells.
+OpenFOAM (for "Open-source Field Operation And Manipulation") is a C++ toolbox
+for the development of customized numerical solvers, and pre-/post-processing utilities
+for the solution of continuum mechanics problems, most prominently including
+computational fluid dynamics (CFD).
 
-More information
+Usage
 ================
- - NGC: https://ngc.nvidia.com/catalog/containers/hpc:lammps
+ # in slurm batch scripts
+ module load openfoam/2020
+ srun --mpi=pmi2 simpleFoam ...
 ]==])
 
-whatis("Name: relion")
-whatis("Version: 3.0.8")
-whatis("Description: RELION (for REgularized LIkelihood OptimizatioN) implements an empirical Bayesian approach for analysis of electron cryo-microscopy (Cryo-EM). Specifically it provides methods of refinement of singular or multiple 3D reconstructions as well as 2D class averages. RELION is an important tool in the study of living cells.")
-whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:relion")
+whatis("Name: openfoam")
+whatis("Version: v8")
+whatis("Description: Open-source Field Operation And Manipulation (OpenFoam) is a software application designed for computational fluid dynamics")
+whatis("URL: https://hub.docker.com/r/chengshenggan/hpc-app-container")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 
@@ -27,8 +28,10 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
-local all_bin = subprocess("singularity run " .. image ..  " ls /opt/relion/bin")
+-- local image = "/lustre/share/img/hpc/hpc-app-container_lammps-2020.sif"
+local all_bin = subprocess("singularity run " .. image ..  " ls /opt/OpenFOAM-8/platforms/linux64GccDPInt32Opt/bin")
 local programs = string.gmatch(all_bin, "%S+")
+
 local entrypoint_args = ""
 
 -- The absolute path to Singularity is needed so it can be invoked on remote
@@ -36,13 +39,13 @@ local entrypoint_args = ""
 -- Trim off the training newline.
 local singularity = capture("which singularity | head -c -1")
 
-local container_launch = singularity .. " run --nv " .. image .. " " .. entrypoint_args
+local container_launch = singularity .. " run " .. image .. " " .. entrypoint_args
 
 -- Multinode support
 setenv("OMPI_MCA_orte_launch_agent", container_launch .. " orted")
 
 -- Programs to setup in the shell
-for i,program in pairs(programs) do
+for program in programs do
         set_shell_function(program, container_launch .. " " .. program .. " $@",
 	                            container_launch .. " " .. program .. " $*")
 end

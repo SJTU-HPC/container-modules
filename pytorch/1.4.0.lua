@@ -42,7 +42,7 @@ setenv("CONTAINER_ENV", "base")
 
 -- Programs to setup in the shell
 for i,program in pairs(programs) do
-        set_shell_function(program, container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $@ \"",
+        set_shell_function(program, container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"",
                                 container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"")
 end
 

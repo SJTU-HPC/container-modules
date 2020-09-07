@@ -14,7 +14,7 @@ software_name = [path for path in os.listdir() if os.path.isdir(path)]
 software_name.remove('.git')
 
 
-def update(config_path, name, tag):
+def update(config_path, name, tag, force):
     config = configparser.ConfigParser()
     config.read(config_path)
     logging.info("Read in config file.")
@@ -29,6 +29,11 @@ def update(config_path, name, tag):
             exit(-1)
         for pull_tag, img_name in zip(tags, imgs):
             if tag != None and tag != img_name:
+                continue
+            if (not force) and os.path.exists(f"{path}/{img_name}.sif"):
+                logging.info(
+                    f"{path}/{img_name}.sif exsit. You can use `--force` to do a force update."
+                )
                 continue
             logging.info(
                 f"Pull image from docker://{url}:{pull_tag} into {path}/{img_name}.sif."
@@ -51,6 +56,10 @@ def main():
                                dest='name',
                                choices=software_name)
     parser_update.add_argument('-t', '--tag', dest='tag')
+    parser_update.add_argument('-f',
+                               '--force',
+                               dest='force',
+                               action='store_true')
 
     kwargs = vars(parser.parse_args())
     if not kwargs['subparser']:

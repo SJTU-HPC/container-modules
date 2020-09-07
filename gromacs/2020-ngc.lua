@@ -1,22 +1,20 @@
 help([==[
-
 Description
 ===========
-RELION (for REgularized LIkelihood OptimizatioN) implements an empirical
-Bayesian approach for analysis of electron cryo-microscopy (Cryo-EM).
-Specifically it provides methods of refinement of singular or multiple 3D
-reconstructions as well as 2D class averages. RELION is an important tool in
-the study of living cells.
-
+GROMACS is a molecular dynamics application designed to simulate Newtonian
+equations of motion for systems with hundreds to millions of particles. GROMACS
+is designed to simulate biochemical molecules like proteins, lipids, and
+nucleic acids that have a lot of complicated bonded interactions. More info on
+GROMACS can be found at http://www.gromacs.org/
 More information
 ================
- - NGC: https://ngc.nvidia.com/catalog/containers/hpc:lammps
+ - NGC: https://ngc.nvidia.com/catalog/containers/hpc:gromacs
 ]==])
 
-whatis("Name: relion")
-whatis("Version: 3.0.8")
-whatis("Description: RELION (for REgularized LIkelihood OptimizatioN) implements an empirical Bayesian approach for analysis of electron cryo-microscopy (Cryo-EM). Specifically it provides methods of refinement of singular or multiple 3D reconstructions as well as 2D class averages. RELION is an important tool in the study of living cells.")
-whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:relion")
+whatis("Name: gromacs")
+whatis("Version: 2020.2")
+whatis("Description: GROMACS is a molecular dynamics application designed to simulate Newtonian equations of motion for systems with hundreds to millions of particles. GROMACS is designed to simulate biochemical molecules like proteins, lipids, and nucleic acids that have a lot of complicated bonded interactions. More info on GROMACS can be found at http://www.gromacs.org/")
+whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:gromacs")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 
@@ -27,8 +25,7 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
-local all_bin = subprocess("singularity run " .. image ..  " ls /opt/relion/bin")
-local programs = string.gmatch(all_bin, "%S+")
+local programs = {"mpirun", "gmx", "gmx_mpi"}
 local entrypoint_args = ""
 
 -- The absolute path to Singularity is needed so it can be invoked on remote

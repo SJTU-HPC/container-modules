@@ -14,8 +14,8 @@ More information
 
 whatis("Name: TensorFlow")
 whatis("Version: 20.08-tf1-py3")
-whatis("Description: PyTorch is a GPU accelerated tensor computational framework with a Python front end. Functionality can be easily extended with common Python libraries such as NumPy, SciPy, and Cython. Automatic differentiation is done with a tape-based system at both a functional and neural network layer level. This functionality brings a high level of flexibility and speed as a deep learning framework and provides accelerated NumPy-like functionality.")
-whatis("URL: https://ngc.nvidia.com/catalog/containers/nvidia:pytorch")
+whatis("Description: TensorFlow is an open-source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) that flow between them. This flexible architecture lets you deploy computation to one or more CPUs or GPUs in a desktop, server, or mobile device without rewriting code.")
+whatis("URL: https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow")
 
 -- conflict(myModuleName(), "rapidsai", "tensorflow")
 
@@ -42,7 +42,7 @@ setenv("CONTAINER_ENV", "base")
 
 -- Programs to setup in the shell
 for i,program in pairs(programs) do
-        set_shell_function(program, container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $@ \"",
+        set_shell_function(program, container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"",
                                 container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"")
 end
 
