@@ -26,7 +26,7 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
-local programs = {"python", "python3", "conda", "pip", "tensorboard"}
+local programs = {"python", "python3", "pip", "tensorboard"}
 local entrypoint_args = ""
 
 -- The absolute path to Singularity is needed so it can be invoked on remote
@@ -38,12 +38,9 @@ local container_launch = singularity .. " run --nv " .. image .. " " .. entrypoi
 
 -- Multinode support
 setenv("OMPI_MCA_orte_launch_agent", container_launch .. " orted")
-setenv("CONTAINER_ENV", "base")
 
 -- Programs to setup in the shell
 for i,program in pairs(programs)do
-        set_shell_function(program, container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"",
-                                container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"")
+        set_shell_function(program, container_launch .. " " .. program .. " $@",
+                                    container_launch .. " " .. program .. " $*")
 end
-
-set_shell_function("source", "export CONTAINER_ENV=$2", "export CONTAINER_ENV=$2")

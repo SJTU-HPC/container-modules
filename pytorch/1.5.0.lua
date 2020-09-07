@@ -38,12 +38,9 @@ local container_launch = singularity .. " run --nv " .. image .. " " .. entrypoi
 
 -- Multinode support
 setenv("OMPI_MCA_orte_launch_agent", container_launch .. " orted")
-setenv("CONTAINER_ENV", "base")
 
 -- Programs to setup in the shell
 for i,program in pairs(programs) do
-        set_shell_function(program, container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"",
-                                container_launch .. " bash -c \" source activate $CONTAINER_ENV && " .. program .. " $* \"")
+        set_shell_function(program, container_launch .. " " .. program .. " $@",
+                                    container_launch .. " " .. program .. " $*")
 end
-
-set_shell_function("source", "export CONTAINER_ENV=$2", "export CONTAINER_ENV=$2")
