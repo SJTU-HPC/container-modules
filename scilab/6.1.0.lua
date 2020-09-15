@@ -2,18 +2,15 @@ help([==[
 
 Description
 ===========
-GNU Octave is software featuring a high-level programming language, 
-primarily intended for numerical computations. Octave helps in solving 
-linear and nonlinear problems numerically, and for performing other 
-numerical experiments using a language that is mostly compatible with MATLAB. 
-It may also be used as a batch-oriented language. Since it is part of the 
-GNU Project, it is free software under the terms of the GNU General Public License.
+Scilab is free and open source software for numerical computation providing 
+a powerful computing environment for engineering and scientific applications.
+
 
 ]==])
 
-whatis("Name: octave")
-whatis("Version: 5.2.0")
-whatis("Description: GNU Octave is software featuring a high-level programming language.")
+whatis("Name: scilab")
+whatis("Version: 6.1.0")
+whatis("Description: Scilab is free and open source software for numerical computation.")
 whatis("URL: https://hub.docker.com/r/chengshenggan/ood-container")
 
 local dir,file_name=splitFileName(myFileName())
@@ -23,7 +20,7 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
-local programs = {"octave"}
+local programs = {"scilab", "scilab-cli"}
 local entrypoint_args = ""
 
 -- The absolute path to Singularity is needed so it can be invoked on remote
