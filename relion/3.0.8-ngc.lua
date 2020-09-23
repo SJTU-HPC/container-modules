@@ -42,7 +42,7 @@ local container_launch = singularity .. " run --nv " .. image .. " " .. entrypoi
 setenv("OMPI_MCA_orte_launch_agent", container_launch .. " orted")
 
 -- Programs to setup in the shell
-for i,program in pairs(programs) do
+for program in programs do
         set_shell_function(program, container_launch .. " " .. program .. " $@",
 	                            container_launch .. " " .. program .. " $*")
 end
