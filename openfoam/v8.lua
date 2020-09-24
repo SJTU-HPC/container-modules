@@ -28,10 +28,6 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
--- local image = "/lustre/share/img/hpc/hpc-app-container_lammps-2020.sif"
-local all_bin = subprocess("singularity run " .. image ..  " ls /opt/OpenFOAM-8/platforms/linux64GccDPInt32Opt/bin")
-local programs = string.gmatch(all_bin, "%S+")
-
 local entrypoint_args = ""
 
 -- The absolute path to Singularity is needed so it can be invoked on remote
@@ -41,8 +37,10 @@ local singularity = capture("which singularity | head -c -1")
 
 local container_launch = singularity .. " run " .. image .. " " .. entrypoint_args
 
--- Multinode support
-setenv("OMPI_MCA_orte_launch_agent", container_launch .. " orted")
+local all_bin = subprocess("singularity run " .. image ..  " bash -c \" \
+                                ls /opt/OpenFOAM-8/platforms/linux64GccDPInt32Opt/bin && \
+                                ls /opt/OpenFOAM-8/bin\"")
+local programs = string.gmatch(all_bin, "%S+")
 
 -- Programs to setup in the shell
 for program in programs do
@@ -55,10 +53,10 @@ set_shell_function("srun",
         "if [[ $1 == \"--mpi=pmi2\" ]]; then \
                 /usr/bin/srun --mpi=pmi2" .. " " .. container_launch .. " " .. " ${@:2}; \
         else \
-                echo \"Error! Please use srun --mpi=pmi2 ... launch your job.\"; \
+                /usr/bin/srun ${@:1}; \
         fi",
         "if [[ $1 == \"--mpi=pmi2\" ]]; then \
                 /usr/bin/srun --mpi=pmi2" .. " " .. container_launch .. " " .. " ${*:2}; \
         else \
-                echo \"Error! Please use srun --mpi=pmi2 ... launch your job.\";  \
+                /usr/bin/srun ${@:1}; \
         fi")

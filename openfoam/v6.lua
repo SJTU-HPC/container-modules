@@ -2,24 +2,22 @@ help([==[
 
 Description
 ===========
-Large-scale Atomic/Molecular Massively Parallel Simulator (LAMMPS) is a
-software application designed for molecular dynamics simulations. It has
-potentials for solid-state materials (metals, semiconductor), soft matter
-(biomolecules, polymers) and coarse-grained or mesoscopic systems. It can be
-used to model atoms or, more generically, as a parallel particle simulator at
-the atomic, meso, or continuum scale.
+OpenFOAM (for "Open-source Field Operation And Manipulation") is a C++ toolbox
+for the development of customized numerical solvers, and pre-/post-processing utilities
+for the solution of continuum mechanics problems, most prominently including
+computational fluid dynamics (CFD).
 
 Usage
 ================
  # in slurm batch scripts
- module load lammps/2020
- srun lmp ...
+ module load openfoam/2020
+ srun --mpi=pmi2 simpleFoam ...
 ]==])
 
-whatis("Name: lammps")
-whatis("Version: 15Jun2020")
-whatis("Description: Large-scale Atomic/Molecular Massively Parallel Simulator (LAMMPS) is a software application designed for molecular dynamics simulations. It has potentials for solid-state materials (metals, semiconductor), soft matter (biomolecules, polymers) and coarse-grained or mesoscopic systems. It can be used to model atoms or, more generically, as a parallel particle simulator at the atomic, meso, or continuum scale.")
-whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:lammps")
+whatis("Name: openfoam")
+whatis("Version: v6")
+whatis("Description: Open-source Field Operation And Manipulation (OpenFoam) is a software application designed for computational fluid dynamics")
+whatis("URL: https://hub.docker.com/r/chengshenggan/hpc-app-container")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 
@@ -30,8 +28,11 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
--- local image = "/lustre/share/img/hpc/hpc-app-container_lammps-2020.sif"
-local programs = {"lmp", "mpirun"}
+local all_bin = subprocess("singularity run " .. image ..  " bash -c \" \
+                                ls /opt/OpenFOAM-6/platforms/linux64GccDPInt32Opt/bin && \
+                                ls /opt/OpenFOAM-6/bin\"")
+local programs = string.gmatch(all_bin, "%S+")
+
 local entrypoint_args = ""
 
 -- The absolute path to Singularity is needed so it can be invoked on remote
@@ -42,7 +43,7 @@ local singularity = capture("which singularity | head -c -1")
 local container_launch = singularity .. " run " .. image .. " " .. entrypoint_args
 
 -- Programs to setup in the shell
-for i,program in pairs(programs) do
+for program in programs do
         set_shell_function(program, container_launch .. " " .. program .. " $@",
 	                            container_launch .. " " .. program .. " $*")
 end
