@@ -2,24 +2,21 @@ help([==[
 
 Description
 ===========
-Large-scale Atomic/Molecular Massively Parallel Simulator (LAMMPS) is a
-software application designed for molecular dynamics simulations. It has
-potentials for solid-state materials (metals, semiconductor), soft matter
-(biomolecules, polymers) and coarse-grained or mesoscopic systems. It can be
-used to model atoms or, more generically, as a parallel particle simulator at
-the atomic, meso, or continuum scale.
+RELION (for REgularized LIkelihood OptimizatioN) implements an empirical
+Bayesian approach for analysis of electron cryo-microscopy (Cryo-EM).
+Specifically it provides methods of refinement of singular or multiple 3D
+reconstructions as well as 2D class averages. RELION is an important tool in
+the study of living cells.
 
-Usage
+More information
 ================
- # in slurm batch scripts
- module load lammps/2020
- srun --mpi=pmi2 lmp ...
+ - NGC: https://ngc.nvidia.com/catalog/containers/hpc:lammps
 ]==])
 
-whatis("Name: lammps")
-whatis("Version: 15Jun2020")
-whatis("Description: Large-scale Atomic/Molecular Massively Parallel Simulator (LAMMPS) is a software application designed for molecular dynamics simulations. It has potentials for solid-state materials (metals, semiconductor), soft matter (biomolecules, polymers) and coarse-grained or mesoscopic systems. It can be used to model atoms or, more generically, as a parallel particle simulator at the atomic, meso, or continuum scale.")
-whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:lammps")
+whatis("Name: relion")
+whatis("Version: 3.0.8")
+whatis("Description: RELION (for REgularized LIkelihood OptimizatioN) implements an empirical Bayesian approach for analysis of electron cryo-microscopy (Cryo-EM). Specifically it provides methods of refinement of singular or multiple 3D reconstructions as well as 2D class averages. RELION is an important tool in the study of living cells.")
+whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:relion")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 
@@ -30,8 +27,8 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
--- local image = "/lustre/share/img/hpc/hpc-app-container_lammps-2020.sif"
-local programs = {"lmp", "mpirun"}
+local all_bin = subprocess("singularity exec " .. image ..  " ls /usr/local/relion/bin")
+local programs = string.gmatch(all_bin, "%S+")
 local entrypoint_args = ""
 
 -- The absolute path to Singularity is needed so it can be invoked on remote
@@ -45,7 +42,7 @@ local container_launch = singularity .. " run --nv " .. image .. " " .. entrypoi
 setenv("OMPI_MCA_orte_launch_agent", container_launch .. " orted")
 
 -- Programs to setup in the shell
-for i,program in pairs(programs) do
+for program in programs do
         set_shell_function(program, container_launch .. " " .. program .. " $@",
 	                            container_launch .. " " .. program .. " $*")
 end

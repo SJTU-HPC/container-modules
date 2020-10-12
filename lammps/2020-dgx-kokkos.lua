@@ -9,11 +9,9 @@ potentials for solid-state materials (metals, semiconductor), soft matter
 used to model atoms or, more generically, as a parallel particle simulator at
 the atomic, meso, or continuum scale.
 
-Usage
+More information
 ================
- # in slurm batch scripts
- module load lammps/2020
- srun --mpi=pmi2 lmp ...
+ - NGC: https://ngc.nvidia.com/catalog/containers/hpc:lammps
 ]==])
 
 whatis("Name: lammps")
@@ -27,7 +25,7 @@ local dir,file_name=splitFileName(myFileName())
 local image = pathJoin(dir, myModuleVersion()..".sif")
 
 if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"not\"; fi") == "not\n") then
-        LmodError("The container image broken. Contact hpc staff for help.")
+    LmodError("The container image broken. Contact hpc staff for help.")
 end
 
 -- local image = "/lustre/share/img/hpc/hpc-app-container_lammps-2020.sif"

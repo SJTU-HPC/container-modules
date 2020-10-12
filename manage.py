@@ -5,6 +5,8 @@ import configparser
 import json
 import logging
 import os
+import copy
+import shutil
 import subprocess
 
 logging.basicConfig(format='[%(levelname)s]\t: %(message)s',
@@ -13,50 +15,73 @@ logging.basicConfig(format='[%(levelname)s]\t: %(message)s',
 software_name = [path for path in os.listdir() if os.path.isdir(path)]
 software_name.remove('.git')
 
+enable_options = ["enable", "disable", "default"]
 
-def update(config_path, name, tag, force):
+
+def deploy(config_path, name, tag, force):
     config = configparser.ConfigParser()
     config.read(config_path)
     logging.info("Read in config file.")
-    for section in config.sections():
+    module_path = config["common"]["module_path"]
+    software_list = copy.deepcopy(config.sections())
+    software_list.remove("common")
+    os.makedirs(module_path, exist_ok=True)
+    for section in software_list:
         tags = json.loads(config.get(section, "tag"))
         imgs = json.loads(config.get(section, "name"))
-        url, path = config[section]["url"], config[section]["path"]
-        if name != None and name != path:
+        enables = json.loads(config.get(section, "enable"))
+        url, path = config[section]["url"], os.path.join(module_path, config[section]["path"])
+        os.makedirs(path, exist_ok=True)
+        if name != None and name != config[section]["path"]:
             continue
         if tag != None and tag not in imgs:
-            logging.error(f"Tag not available. {tag} not in {imgs}")
+            logging.error(f"  Tag not available. {tag} not in {imgs}")
             exit(-1)
-        for pull_tag, img_name in zip(tags, imgs):
-            if tag != None and tag != img_name:
+        logging.info(f"Process [{section}].")
+        for pull_tag, img_name, enable in zip(tags, imgs, enables):
+            if enable not in enable_options:
+                logging.error(f"  Option enable {tag} not in {enable_options}")
+                exit(-1)
+            if (tag != None and tag != img_name) or enable == "disable":
                 continue
+            src_lua = os.path.join(config[section]["path"], img_name+".lua")
+            dst_lua = os.path.join(path, img_name+".lua")
+            shutil.copyfile(src_lua, dst_lua)
+            logging.info(f"  Copy {src_lua} to {dst_lua}.")
             if (not force) and os.path.exists(f"{path}/{img_name}.sif"):
                 logging.info(
-                    f"{path}/{img_name}.sif exsit. You can use `--force` to do a force update."
+                    f"  {path}/{img_name}.sif exsit. You can use `--force` to do a force update."
                 )
-                continue
-            logging.info(
-                f"Pull image from docker://{url}:{pull_tag} into {path}/{img_name}.sif."
-            )
-            pull_cmd = f"singularity pull --force {path}/{img_name}.sif docker://{url}:{pull_tag}"
-            subprocess.call(pull_cmd, shell=True)
+            else:
+                logging.info(
+                    f"  Pull image from docker://{url}:{pull_tag} into {path}/{img_name}.sif."
+                )
+                pull_cmd = f"singularity pull --force {path}/{img_name}.sif docker://{url}:{pull_tag}"
+                subprocess.call(pull_cmd, shell=True)
+
+            if enable == "default":
+                logging.info(f"  Make {img_name} as default module.")
+                default_path = os.path.join(path, "default")
+                if os.path.exists(default_path):
+                    os.remove(default_path)
+                os.symlink(dst_lua, default_path)
 
 
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest='subparser')
 
-    parser_update = subparsers.add_parser('update')
-    parser_update.add_argument('-c',
+    parser_deploy = subparsers.add_parser('deploy')
+    parser_deploy.add_argument('-c',
                                '--config',
                                dest='config_path',
                                default='./config.ini')
-    parser_update.add_argument('-n',
+    parser_deploy.add_argument('-n',
                                '--name',
                                dest='name',
                                choices=software_name)
-    parser_update.add_argument('-t', '--tag', dest='tag')
-    parser_update.add_argument('-f',
+    parser_deploy.add_argument('-t', '--tag', dest='tag')
+    parser_deploy.add_argument('-f',
                                '--force',
                                dest='force',
                                action='store_true')
