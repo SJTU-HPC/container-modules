@@ -18,6 +18,8 @@ whatis("Version: 3.0.8")
 whatis("Description: RELION (for REgularized LIkelihood OptimizatioN) implements an empirical Bayesian approach for analysis of electron cryo-microscopy (Cryo-EM). Specifically it provides methods of refinement of singular or multiple 3D reconstructions as well as 2D class averages. RELION is an important tool in the study of living cells.")
 whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:relion")
 
+add_property("arch", "gpu")
+
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 
 local dir,file_name=splitFileName(myFileName())

@@ -21,6 +21,8 @@ whatis("Version: 15Jun2020")
 whatis("Description: Large-scale Atomic/Molecular Massively Parallel Simulator (LAMMPS) is a software application designed for molecular dynamics simulations. It has potentials for solid-state materials (metals, semiconductor), soft matter (biomolecules, polymers) and coarse-grained or mesoscopic systems. It can be used to model atoms or, more generically, as a parallel particle simulator at the atomic, meso, or continuum scale.")
 whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:lammps")
 
+add_property("arch", "gpu")
+
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 
 local dir,file_name=splitFileName(myFileName())
