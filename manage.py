@@ -62,8 +62,8 @@ def deploy(config_path, name, tag, force):
             if enable == "default":
                 logging.info(f"  Make {img_name} as default module.")
                 default_path = os.path.join(path, "default")
-                if os.path.exists(default_path):
-                    os.remove(default_path)
+                if os.path.islink(default_path):
+                    os.unlink(default_path)
                 os.symlink(dst_lua, default_path)
 
 
