@@ -39,6 +39,7 @@ local container_launch = singularity .. " run " .. image .. " " .. entrypoint_ar
 
 local all_bin = subprocess("singularity run " .. image ..  " bash -c \" \
                                 ls /opt/OpenFOAM-8/platforms/linux64GccDPInt32Opt/bin && \
+                                cd /opt/OpenFOAM-8/wmake && find * -maxdepth 0 -type f -executable && \
                                 ls /opt/OpenFOAM-8/bin\"")
 local programs = string.gmatch(all_bin, "%S+")
 
