@@ -7,15 +7,10 @@ the graph edges represent the multidimensional data arrays (tensors) that flow
 between them. This flexible architecture lets you deploy computation to one or
 more CPUs or GPUs in a desktop, server, or mobile device without rewriting
 code.
-More information
-================
- - NGC: https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow
 ]==])
 
 whatis("Name: TensorFlow")
 whatis("Version: 20.03-tf2-py3")
-whatis("Description: TensorFlow is an open-source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) that flow between them. This flexible architecture lets you deploy computation to one or more CPUs or GPUs in a desktop, server, or mobile device without rewriting code.")
-whatis("URL: https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow")
 
 add_property("arch", "gpu")
 

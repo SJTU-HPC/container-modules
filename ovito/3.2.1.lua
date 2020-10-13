@@ -8,18 +8,10 @@ into materials phenomena and physical processes. The program is freely
 available for all major platforms under an open source license.
 It has served in a growing number of computational simulation studies
 as a powerful tool to analyze, understand and illustrate simulation results.
-
-Usage
-================
- # in HPC Studio Desktop
- module load ovito/2020-ovito
- ovito
 ]==])
 
 whatis("Name: OVITO")
 whatis("Version: Basic 3.2.1")
-whatis("Description: OVITO is a scientific visualization and analysis software for atomistic and particle simulation data. ")
-whatis("URL: https://www.ovito.org/")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 

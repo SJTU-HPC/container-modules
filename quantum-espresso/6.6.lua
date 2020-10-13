@@ -10,8 +10,6 @@ and pseudopotentials (both norm-conserving and ultrasoft).
 
 whatis("Name: espresso")
 whatis("Version: 6.6")
-whatis("Quantum ESPRESSO is an integrated suite of computer codes for electronic structure calculations and materials modeling at the nanoscale")
-whatis("URL: https://hub.docker.com/r/chengshenggan/hpc-app-container")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 

@@ -6,15 +6,10 @@ equations of motion for systems with hundreds to millions of particles. GROMACS
 is designed to simulate biochemical molecules like proteins, lipids, and
 nucleic acids that have a lot of complicated bonded interactions. More info on
 GROMACS can be found at http://www.gromacs.org/
-More information
-================
- - NGC: https://ngc.nvidia.com/catalog/containers/hpc:gromacs
 ]==])
 
 whatis("Name: gromacs")
 whatis("Version: 2020.2")
-whatis("Description: GROMACS is a molecular dynamics application designed to simulate Newtonian equations of motion for systems with hundreds to millions of particles. GROMACS is designed to simulate biochemical molecules like proteins, lipids, and nucleic acids that have a lot of complicated bonded interactions. More info on GROMACS can be found at http://www.gromacs.org/")
-whatis("URL: https://ngc.nvidia.com/catalog/containers/hpc:gromacs")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 

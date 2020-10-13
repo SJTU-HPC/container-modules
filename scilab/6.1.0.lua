@@ -4,14 +4,10 @@ Description
 ===========
 Scilab is free and open source software for numerical computation providing 
 a powerful computing environment for engineering and scientific applications.
-
-
 ]==])
 
 whatis("Name: scilab")
 whatis("Version: 6.1.0")
-whatis("Description: Scilab is free and open source software for numerical computation.")
-whatis("URL: https://hub.docker.com/r/chengshenggan/ood-container")
 
 local dir,file_name=splitFileName(myFileName())
 local image = pathJoin(dir, myModuleVersion()..".sif")

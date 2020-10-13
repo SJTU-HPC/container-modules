@@ -6,18 +6,10 @@ OpenFOAM (for "Open-source Field Operation And Manipulation") is a C++ toolbox
 for the development of customized numerical solvers, and pre-/post-processing utilities
 for the solution of continuum mechanics problems, most prominently including
 computational fluid dynamics (CFD).
-
-Usage
-================
- # in slurm batch scripts
- module load openfoam/2020
- srun --mpi=pmi2 simpleFoam ...
 ]==])
 
 whatis("Name: openfoam")
 whatis("Version: v8")
-whatis("Description: Open-source Field Operation And Manipulation (OpenFoam) is a software application designed for computational fluid dynamics")
-whatis("URL: https://hub.docker.com/r/chengshenggan/hpc-app-container")
 
 -- conflict(myModuleName(), "openmpi", "chroma", "milc", "qmcpack", "relion")
 

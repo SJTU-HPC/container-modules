@@ -8,13 +8,10 @@ linear and nonlinear problems numerically, and for performing other
 numerical experiments using a language that is mostly compatible with MATLAB. 
 It may also be used as a batch-oriented language. Since it is part of the 
 GNU Project, it is free software under the terms of the GNU General Public License.
-
 ]==])
 
 whatis("Name: octave")
 whatis("Version: 5.2.0")
-whatis("Description: GNU Octave is software featuring a high-level programming language.")
-whatis("URL: https://hub.docker.com/r/chengshenggan/ood-container")
 
 local dir,file_name=splitFileName(myFileName())
 local image = pathJoin(dir, myModuleVersion()..".sif")
