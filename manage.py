@@ -42,21 +42,30 @@ def deploy(config_path, name, tag, force):
             if enable not in enable_options:
                 logging.error(f"  Option enable {tag} not in {enable_options}")
                 exit(-1)
-            if (tag != None and tag != img_name) or enable == "disable":
+            if (tag != None and tag != img_name):
                 continue
             src_lua = os.path.join(config[section]["path"], img_name+".lua")
-            dst_lua = os.path.join(path, img_name+".lua")
+            dst_lua = f"{path}/{img_name}.lua"
+            dst_img = f"{path}/{img_name}.sif"
+            if enable == "disable":
+                if os.path.exists(dst_lua):
+                    os.remove(dst_lua)
+                    logging.info(f"  {dst_lua} deleted.")
+                if os.path.exists(dst_img):
+                    os.remove(dst_img)
+                    logging.info(f"  {dst_img} deleted.")
+                continue
             shutil.copyfile(src_lua, dst_lua)
             logging.info(f"  Copy {src_lua} to {dst_lua}.")
-            if (not force) and os.path.exists(f"{path}/{img_name}.sif"):
+            if (not force) and os.path.exists(dst_img):
                 logging.info(
-                    f"  {path}/{img_name}.sif exsit. You can use `--force` to do a force update."
+                    f"  {dst_img} exsit. You can use `--force` to do a force update."
                 )
             else:
                 logging.info(
-                    f"  Pull image from docker://{url}:{pull_tag} into {path}/{img_name}.sif."
+                    f"  Pull image from docker://{url}:{pull_tag} into {dst_img}."
                 )
-                pull_cmd = f"singularity pull --force {path}/{img_name}.sif docker://{url}:{pull_tag}"
+                pull_cmd = f"singularity pull --force {dst_img} docker://{url}:{pull_tag}"
                 subprocess.call(pull_cmd, shell=True)
 
             if enable == "default":
