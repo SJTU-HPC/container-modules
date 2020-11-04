@@ -9,4 +9,4 @@ backup_slurmquota:
   tags:
     - shell.login.pi.sjtu.edu.cn
   script:
-    - rsync -avr --delete --progress rsync /lustre/share/singularity/modules/rsync
+    - rsync -avr --delete --progress xalt /lustre/share/singularity/modules/xalt
