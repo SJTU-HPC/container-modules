@@ -1,0 +1,19 @@
+#%Module1.0
+setenv XALT_EXECUTABLE_TRACKING       yes
+
+# Uncomment this to track GPU usage
+#setenv XALT_GPU_TRACKING              yes
+
+setenv        XALT_DIR        /opt/xalt/xalt
+prepend-path  PATH            /opt/xalt/xalt/bin  100
+prepend-path  LD_PRELOAD      /opt/xalt/xalt/lib64/libxalt_init.so
+prepend-path  COMPILER_PATH   /opt/xalt/xalt/bin
+
+# Uncomment this to use XALT inside Singularity containers
+#setenv SINGULARITYENV_LD_PRELOAD /opt/apps/xalt/xalt/lib64/libxalt_init.so
+#prepend-path  SINGULARITY_BINDPATH   /opt/apps/xalt/xalt
+
+################################################
+# Only set this is production not for testing!!!
+################################################
+setenv XALT_SCALAR_SAMPLING  yes
