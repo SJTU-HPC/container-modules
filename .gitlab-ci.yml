@@ -4,7 +4,7 @@ variables:
 stages:
   - deploy xalt
 
-backup_slurmquota:
+deploy_xalt_module_to_lustre:
   stage: deploy xalt
   tags:
     - shell.login.pi.sjtu.edu.cn
