@@ -39,6 +39,9 @@ for program in programs do
 	                            container_launch .. " " .. program .. " $*")
 end
 
+set_shell_function("mpirun", container_launch .. " mpirun " ..  " $@",
+                                container_launch .. " mpirun " ..  " $*")
+
 -- setup srun for slurm user
 set_shell_function("srun", 
         "if [[ $1 == \"--mpi=pmi2\" ]]; then \
