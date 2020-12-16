@@ -23,7 +23,7 @@ if (subprocess("if [[ -e " .. image .. " ]]; then echo \"exist\"; else echo \"no
         LmodError("The container image broken. Contact hpc staff for help.")
 end
 
-local all_bin = subprocess("singularity exec " .. image ..  " ls /usr/local/relion/bin")
+local all_bin = subprocess("singularity exec " .. image ..  " ls /opt/relion/bin")
 local programs = string.gmatch(all_bin, "%S+")
 local entrypoint_args = ""
 
