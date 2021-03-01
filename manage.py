@@ -62,11 +62,18 @@ def deploy(config_path, name, tag, force):
                     f"  {dst_img} exsit. You can use `--force` to do a force update."
                 )
             else:
-                logging.info(
-                    f"  Pull image from docker://{url}:{pull_tag} into {dst_img}."
-                )
-                pull_cmd = f"singularity pull --force {dst_img} docker://{url}:{pull_tag}"
-                subprocess.call(pull_cmd, shell=True)
+                if url == "local":
+                    logging.info(
+                        f"  Copy image {pull_tag} into {dst_img}."
+                    )
+                    copy_cmd = f"cp {pull_tag} {dst_img}"
+                    subprocess.call(copy_cmd, shell=True)
+                else:
+                    logging.info(
+                        f"  Pull image from docker://{url}:{pull_tag} into {dst_img}."
+                    )
+                    pull_cmd = f"singularity pull --force {dst_img} docker://{url}:{pull_tag}"
+                    subprocess.call(pull_cmd, shell=True)
 
             if enable == "default":
                 logging.info(f"  Make {img_name} as default module.")
